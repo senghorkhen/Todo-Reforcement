@@ -15,6 +15,19 @@ const options = {
 const today = new Date();
 DATE_HTML.innerHTML = today.toLocaleString("en-US", options);
 
+// add todo list by button add
+const ADD_HTML = document.querySelector('#icon_add')
+ADD_HTML.addEventListener('click', function () {
+  const inputValue = INPUT_HTML.value;
+
+  if (inputValue != "") {
+    // 1. add the todo
+    addTodo(inputValue)
+    // 2.  Clear input
+    clearInput();
+  }
+});
+
 let todoItems = [];
 let id = 0;
 let data = localStorage.getItem("TODO");
@@ -45,7 +58,7 @@ document.addEventListener("keyup", event => {
 function clearInput() {
 	INPUT_HTML.value = "";
 }
-// TODO: get id and return value
+// get id and return value
 function getTodoFromId(id) {
   for(let item of todoItems) {
     if(item.id === id) {
@@ -74,9 +87,9 @@ function updateList() {
         <p class="text ${item.done ? LINE_THOUGH_STYLE: "" }">${item.name}</p>
         <i class="fa fa-trash-o de" job="delete" id="${item.id}"></i>
     </li>`;
-  LIST_HTML.innerHTML = code;
-  
+    
   }
+  LIST_HTML.innerHTML = code;
 }
 
 function saveJson() {
@@ -104,7 +117,7 @@ function completeToDo(id) {
     todo.done = !todo.done;
 
     // 3. Save JSON
-    saveJSon();
+    saveJson();
 
     // 4. refresh html
     updateList();
@@ -113,16 +126,16 @@ function completeToDo(id) {
 
 function removeToDo(id) {
   // 1. Find index todo element from ID
-  var index = -1; // is the value that deferent by index
-  for(let i = 0; todoItems.length; i++){
+  var index = -1;
+  for(let i = 0; i < todoItems.length; i++) {
     if(todoItems[i].id === id){
       index = i;
     }
-    // remove
-    if(index != -1){
-      todoItems.splice(index,1);
-    }
-    saveJson();
-    updateList();
   }
+  // remove
+  if(index != -1) {
+    todoItems.splice(index, 1);
+  }
+  saveJson();
+  updateList();
 }
